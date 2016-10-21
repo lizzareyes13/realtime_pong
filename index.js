@@ -22,14 +22,16 @@ io.on("connection", function(socket){
     }
   }
   if(playerCount < 2){
-
   players[socket.id] = {x:300, y:100, lastMove: new Date().getTime()};
   socket.on("player_moved", function(data){
     players[socket.id] = data;
     socket.broadcast.emit("player_moved", data);
-
     });
   }
+  socket.on("disconnect", function(){
+    if (players[socket.id])
+    delete players[socket.id];
+  });
 });
 
 app.get( '/', function(req,res){
